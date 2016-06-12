@@ -21,18 +21,18 @@ class Santa
     @y_starting_point = y_starting_point
   end
 
-  def listen_to_radio direction, map, first_time=false
+  def listen_to_radio direction, map
     case direction
     when '>'
       @x_coord += 1
     when '<'
       @x_coord -= 1
     when '^'
-      @y_coord += 1
-    when 'v'
       @y_coord -= 1
+    when 'v'
+      @y_coord += 1
     end
-    first_time ? determine_distance : give_present(map)
+    map.nil? ? determine_distance : give_present(map)
   end
 
   def determine_distance
@@ -105,16 +105,16 @@ class Elf
     @instructions = read_file 
   end
 
-  def give_instructions map, santa, robot, first_time=false
+  def give_instructions map, santa, robot
     @instructions.split("").each_with_index do |direction,index|
       unless robot.nil?
         if index.odd?
-          santa.listen_to_radio direction, map, first_time
+          santa.listen_to_radio direction, map
         else
-          robot.listen_to_radio direction, map, first_time
+          robot.listen_to_radio direction, map
         end
       else
-        santa.listen_to_radio direction, map, first_time
+        santa.listen_to_radio direction, map
       end
     end
   end

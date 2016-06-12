@@ -4,18 +4,15 @@ require_relative 'solution'
 
 describe 'GPS' do
   let(:santa) { Santa.new }
+  let(:santa_gps) { GPS.new(santa, robot) }
 
   shared_examples_for '#draw_map' do
-    let(:santa_gps) { GPS.new(santa, robot) }
-
     it 'can draw map' do
       expect(santa_gps.draw_map).to eq Array.new(expected_y) { Array.new(expected_x, 0) }
     end
   end
 
   shared_examples_for 'initialize_with_correct_starting_point' do
-    let(:santa_gps) { GPS.new(santa, robot) }
-
     it 'return correct value' do
       expect(santa_gps.x_starting_point).to eq expected_x_starting_point
       expect(santa_gps.y_starting_point).to eq expected_y_starting_point
@@ -39,7 +36,7 @@ describe 'GPS' do
     it_behaves_like 'initialize_with_correct_starting_point'
     it_behaves_like '#draw_map'
   end
-  
+
   describe 'with robot' do
     let(:robot) { Santa.new }
     let(:expected_x_starting_point) { 3 }
@@ -62,8 +59,13 @@ end
 describe 'Santa' do
   let(:santa) { Santa.new }
   let(:robot) { Santa.new }
-  let(:santa_gps) { GPS.new(santa)}
-  let(:map) { santa_gps.draw_map }
+  let(:map) {
+    [[1,0,0,0],
+     [0,0,0,0],
+     [0,0,0,0],
+     [0,0,0,0],
+     [0,0,0,0]]
+  }
 
   it 'initialize with the correct value' do
     expect(santa.x_coord).to eq 0
@@ -75,28 +77,54 @@ describe 'Santa' do
   end
 
   describe '#listen to radio' do
-    describe 'first trial run' do
-      it 'return correct distance' do
+    before do
+      santa.x_coord          = 0
+      santa.y_coord          = 0
+      santa.largest_x_coord  = 0
+      santa.largest_y_coord  = 0
+      santa.smallest_x_coord = 0
+      santa.smallest_y_coord = 0
+    end
 
+    describe '#determine_distance' do
+      it 'return correct distance' do
+        santa.listen_to_radio '>', nil
+        expect(santa.largest_x_coord).to eq 1
+        santa.listen_to_radio 'v', nil
+        expect(santa.largest_y_coord).to eq 1
+        santa.listen_to_radio '<', nil
+        santa.listen_to_radio '<', nil
+        expect(santa.smallest_x_coord).to eq -1
+        santa.listen_to_radio '^', nil
+        santa.listen_to_radio '^', nil
+        expect(santa.smallest_y_coord).to eq -1
+      end
+    end
+
+    describe 'give_present' do
+      it 'gives out present' do
+        santa.go_back_home 0, 0
+        santa.listen_to_radio '>', map
+        expect(map[0][1]).to eq 1
+        santa.listen_to_radio '<', map
+        expect(map[0][0]).to eq 2
+        santa.listen_to_radio 'v', map
+        expect(map[1][0]).to eq 1
+        santa.listen_to_radio '^', map
+        expect(map[0][0]).to eq 3
       end
     end
   end
 
-  # describe '#go_back_home' do
-  #   before do
-  #     santa.listen_to_radio '>', 
-  #   end
-  #
-  #   it '#go_back_home' do
-  #     santa.go_back_home
-  #
-  #     expect(santa.x_coord).to eq 0
-  #     expect(santa.y_coord).to eq 0
-  #     expect(santa.x_starting_point).to eq 0
-  #     expect(santa.y_starting_point).to eq 0
-  #   end
+  # it '#go_back_home' do
+  #   santa.go_back_home
+  #   expect(santa.x_coord).to eq 0
+  #   expect(santa.y_coord).to eq 0
+  #   expect(santa.x_starting_point).to eq 0
+  #   expect(santa.y_starting_point).to eq 0
   # end
 end
+
 describe 'Elf' do
   let(:file_content) { '<<>>' }
   let!(:elf) { Elf.new file_content }
@@ -135,6 +163,7 @@ describe 'Elf' do
 end
 
 describe 'overall test' do
+
   shared_examples_for 'it_should_give_the_correct_final_answer' do
     let(:file_content) { '^v^v^v^v^v' }
     let!(:elf) { Elf.new file_content }
@@ -142,8 +171,7 @@ describe 'overall test' do
     let(:map) { nil }
 
     before do
-      first_time = true
-      elf.give_instructions map, santa, robot, first_time
+      elf.give_instructions map, santa, robot
       @santa_gps = GPS.new santa, robot
       @map = @santa_gps.draw_map
       santa.go_back_home @santa_gps.x_starting_point, @santa_gps.y_starting_point

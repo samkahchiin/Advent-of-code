@@ -1,5 +1,6 @@
 require_relative 'solution'
 require 'byebug'
+
 # Script
 puts 'Does Santa Claus has helper? (y/n)'
 input = gets.chomp.downcase
@@ -22,11 +23,9 @@ if valid
   santa = Santa.new
 
   file = File.new 'input.txt'
-
   elf = Elf.new file.content
-  first_time = true
 
-  elf.give_instructions @map, santa, robot, first_time
+  elf.give_instructions @map, santa, robot
 
   santa_gps = GPS.new santa, robot
   @map = santa_gps.draw_map
