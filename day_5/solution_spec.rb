@@ -78,27 +78,91 @@ describe 'Helper' do
   end
 
   describe '#check_all' do
+    # it 'will return true if it fulfill all the conditions' do
+    #   ['ugknbfddgicrmopn', 'aaa'].each do |string|
+    #     helper.string = string
+    #     expect(helper.string_is_nice?).to eq true
+    #   end
+    # end
+    #
+    # it 'will return false if it didn\'t fulfill all the conditions' do
+    #   ['jchzalrnumimnmhp', 'haegwjzuvuyypxyu', 'dvszwmarrgswjxmb'].each do |string|
+    #     helper.string = string
+    #     expect(helper.string_is_nice?).to eq false
+    #   end
+    # end
     it 'will return true if it fulfill all the conditions' do
-      ['ugknbfddgicrmopn', 'aaa'].each do |string|
+      ['qjhvhtzxzqqjkmpb', 'xxyxx'] .each do |string|
         helper.string = string
         expect(helper.string_is_nice?).to eq true
       end
     end
 
     it 'will return false if it didn\'t fulfill all the conditions' do
-      ['jchzalrnumimnmhp', 'haegwjzuvuyypxyu', 'dvszwmarrgswjxmb'].each do |string|
+      ['uurcxstgmygtbstg', 'ieodomkazucvgmuy'].each do |string|
         helper.string = string
         expect(helper.string_is_nice?).to eq false
       end
     end
   end
 
+  describe '#has_repeat_two_letters?' do
+    shared_examples_for 'has_repeat_two_letters?' do
+      it 'will return the correct value' do
+        test_strings.each do |string|
+          helper.string = string
+          expect(helper.has_repeat_two_letters?).to eq expected_result
+        end
+      end
+    end
+
+    describe 'when there are two letters' do
+      let(:test_strings) { ['aabbaa','bbasdfasbbasdf'] }
+      let(:expected_result) { true }
+      it_behaves_like 'has_repeat_two_letters?'
+    end
+
+    describe 'when there are no two repeated letters' do
+      let(:test_strings) { ['abbbadaafa','aaa'] }
+      let(:expected_result) { false }
+      it_behaves_like 'has_repeat_two_letters?'
+    end
+  end
+
+  describe '#has_repeat_letters_alternatively' do
+    shared_examples_for 'has_repeat_letters_alternatively?' do
+      it 'will return the correct value' do
+        test_strings.each do |string|
+          helper.string = string
+          expect(helper.has_repeat_letters_alternatively?).to eq expected_result
+        end
+      end
+    end
+
+    describe 'when there are repeat letters alternatively' do
+      let(:test_strings) { ['xyx', 'abcdefeghi','aaa'] }
+      let(:expected_result) { true }
+      it_behaves_like 'has_repeat_letters_alternatively?'
+    end
+
+    describe 'when there are no repeat letters alternatively' do
+      let(:test_strings) { ['xyyxx', 'abcdeffeghi','aabbaa'] }
+      let(:expected_result) { false }
+      it_behaves_like 'has_repeat_letters_alternatively?'
+    end
+  end
+
   describe '#calculate_nice_string' do
-    let(:contents) { 'jchzalrnumimnmhp
-                     haegwjzuvuyypxyu
-                     dvszwmarrgswjxmb
-                     ugknbfddgicrmopn
-                     aaa' }
+    # let(:contents) { 'jchzalrnumimnmhp
+    #                  haegwjzuvuyypxyu
+    #                  dvszwmarrgswjxmb
+    #                  ugknbfddgicrmopn
+    #                  aaa' }
+    let(:contents) { 'qjhvhtzxzqqjkmpb
+                      xxyxx
+                      uurcxstgmygtbstg
+                      ieodomkazucvgmuy' }
+
     let(:helper) { Helper.new(contents) }
 
     it 'returns the number of nice strings' do

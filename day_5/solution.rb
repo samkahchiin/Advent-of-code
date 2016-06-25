@@ -37,8 +37,15 @@ class Helper
   end
 
   def has_repeat_letters?
-    (0..@string.length - 1).each do |index|
-      return true if @string[index] == @string[index - 1] && index != 0
+    (0..@string.length - 2).each do |index|
+      return true if @string[index] == @string[index + 1]
+    end
+    false
+  end
+
+  def has_repeat_letters_alternatively?
+    (0..@string.length - 3).each do |index|
+      return true if @string[index] == @string[index + 2]
     end
     false
   end
@@ -51,7 +58,16 @@ class Helper
     false
   end
 
+  def has_repeat_two_letters?
+    (0..@string.length - 2).each do |index|
+      two_letters = @string[index..index+1]
+      return true if @string.scan(two_letters).count > 1
+    end
+    false
+  end
+
   def string_is_nice?
-    is_three_vowels? && has_repeat_letters? && !has_illegal_substring?
+    # is_three_vowels? && has_repeat_letters? && !has_illegal_substring?
+    has_repeat_letters_alternatively? && has_repeat_two_letters?
   end
 end
