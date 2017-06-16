@@ -3,6 +3,7 @@ class SantaTracker
     @instructions = File.read file
   end
 
+  # NOTE: can use count
   def track
     floor = 0
     position = 0
@@ -24,5 +25,5 @@ class SantaTracker
   end
 end
 
-santa_tracker = SantaTracker.new 'input.txt'
+santa_tracker = SantaTracker.new "input.txt"
 santa_tracker.track
