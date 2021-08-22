@@ -4,6 +4,7 @@ search_arr = expenses.reverse
 
 MAGIC_NUMBER = 2020
 
+# 1003971
 expenses.each do |num|
     another_num = search_arr.find { |n| n == (MAGIC_NUMBER - num) }
     if another_num
@@ -12,6 +13,7 @@ expenses.each do |num|
     end
 end
 
+# 84035952
 expenses.each_with_index do |num_1, i|
     expenses[i+1..-1].each do |num_2|
         another_num = search_arr.find { |n| n == (MAGIC_NUMBER - num_1 - num_2) }
