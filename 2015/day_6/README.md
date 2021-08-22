@@ -3,8 +3,7 @@
 Because your neighbors keep defeating you in the holiday house decorating contest year after year,
 you've decided to deploy one million lights in a 1000x1000 grid.
 
-Furthermore, because you've been especially nice this year, Santa has mailed you instructions on how to display the
-ideal lighting configuration.
+Furthermore, because you've been especially nice this year, Santa has mailed you instructions on how to display the ideal lighting configuration.
 
 Lights in your grid are numbered from 0 to 999 in each direction; the lights at each corner are at 0,0, 0,999, 999,999, and 999,0.
 The instructions include whether to turn on, turn off, or toggle various inclusive ranges given as coordinate pairs.
